@@ -15,6 +15,7 @@ script:
   - ${PWD}/tests/test.sh
 
 notifications:
+  email: false
   webhooks: https://galaxy.ansible.com/api/v1/notifications/
   slack:
     rooms:
