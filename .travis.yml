@@ -16,6 +16,7 @@ script:
 
   - 'docker exec --tty ${container_id} env TERM=xterm service awslogs status'
   - 'docker exec --tty ${container_id} env TERM=xterm cat /var/log/awslogs.log'
+  - 'docker exec --tty ${container_id} env TERM=xterm cat /var/awslogs/awslogs.log'
 
 notifications:
   email: false
