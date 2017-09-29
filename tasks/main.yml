@@ -9,7 +9,7 @@
     state: directory
     mode: 755
 
-- name: Download installsScript
+- name: Download install script
   get_url:
     url: https://s3.amazonaws.com/aws-cloudwatch/downloads/latest/awslogs-agent-setup.py
     dest: /tmp/awslogs-agent-setup.py

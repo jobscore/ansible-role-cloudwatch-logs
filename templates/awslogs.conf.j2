@@ -16,5 +16,5 @@ encoding = {% if log.encoding is defined %}{{ log.encoding }}{% else %}{{ defaul
 {% for key, value in log.kwargs.values() %}
 {{ key }} = {{ value }}
 {% endfor %}
-{% endfif %}
+{% endif %}
 {% endfor %}
