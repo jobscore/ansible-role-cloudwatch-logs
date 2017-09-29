@@ -1,2 +1,12 @@
 ---
 # defaults file for cloudwatch-logs
+
+aws_region: us-east-1
+
+source_path: /var/awslogs
+logging_config_file: /etc/awslogs/awslogs.conf
+use_gzip_http_content_encoding: true
+
+default_datetime_format: '%b %d %H:%M:%S'
+default_time_zone: UTC
+default_encoding: utf_8

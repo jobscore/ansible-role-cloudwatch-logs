@@ -1,4 +1,8 @@
 ---
 - hosts: all
+  vars:
+    log_files:
+      - path: /var/log/messages
+        
   roles:
     - role_under_test
