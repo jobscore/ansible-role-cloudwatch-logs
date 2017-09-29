@@ -5,7 +5,7 @@
       - file: /var/log/messages
         name: messages
         log_group_name: /var/log/messages
-        
+
 
   roles:
     - role_under_test
