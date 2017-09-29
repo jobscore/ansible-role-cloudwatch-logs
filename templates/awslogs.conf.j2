@@ -1,5 +1,5 @@
 [general]
-state_file = {{ source_path }}/state/agent-state
+state_file = {{ state_file }}
 logging_config_file = {{ logging_config_file }}
 use_gzip_http_content_encoding = {{ use_gzip_http_content_encoding }}
 
@@ -12,7 +12,9 @@ log_stream_name = {% if log.log_stream_name is defined %}{{ log.log_stream_name 
 datetime_format = {% if log.datetime_format is defined %}{{ log.datetime_format }}{% else %}{{ default_datetime_format }}{% endif %}
 time_zone = {% if log.time_zone is defined %}{{ log.time_zone }}{% else %}{{ default_time_zone }}{% endif %}
 encoding = {% if log.encoding is defined %}{{ log.encoding }}{% else %}{{ default_encoding }}{% endif %}
+{% if log.kwargs is defined %}
 {% for key, value in log.kwargs.values() %}
 {{ key }} = {{ value }}
 {% endfor %}
+{% enfif %}
 {% endfor %}

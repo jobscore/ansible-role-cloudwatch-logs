@@ -4,7 +4,8 @@
 aws_region: us-east-1
 
 source_path: /var/awslogs
-logging_config_file: /etc/awslogs/awslogs.conf
+logging_config_file: "{{ source_path }}/awslogs.conf"
+state_file: "{{ source_path }}/state/agent-state"
 use_gzip_http_content_encoding: true
 
 default_datetime_format: '%b %d %H:%M:%S'
