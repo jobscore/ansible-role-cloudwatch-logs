@@ -1,4 +1,11 @@
 ---
 - hosts: all
+  vars:
+    log_files:
+      - file: /var/log/messages
+        name: messages
+        log_group_name: /var/log/messages
+
+
   roles:
-    - cloudwatch-logs
+    - role_under_test
