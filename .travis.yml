@@ -14,6 +14,9 @@ script:
   # Run tests.
   - ${PWD}/tests/test.sh
 
+  - 'docker exec --tty ${container_id} env TERM=xterm service awslogs status'
+  - 'docker exec --tty ${container_id} env TERM=xterm cat /var/log/awslogs.log'
+
 notifications:
   email: false
   webhooks: https://galaxy.ansible.com/api/v1/notifications/
