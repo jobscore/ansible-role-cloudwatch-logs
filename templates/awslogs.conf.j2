@@ -7,7 +7,6 @@ use_gzip_http_content_encoding = {{ use_gzip_http_content_encoding }}
 
 [{% if log.name is defined %}{{ log.name }}{% else %}{{ log.file }}{% endif %}]
 file = {{ log.file }}
-
 log_group_name = {% if log.log_group_name is defined %}{{ log.log_group_name }}
 {% else %}{{ log.file }}
 {% endif %}
