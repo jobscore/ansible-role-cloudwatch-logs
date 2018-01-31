@@ -1,34 +1,40 @@
 ---
-- name: Ensure the APT cache is updated
+- name: Ensure that extra keys are present
+  apt_key:
+    url: "{{ item }}"
+    state: present
+  register: apt_keys
+  with_items:
+    - "https://artifacts.elastic.co/GPG-KEY-elasticsearch"
+
+- name: Ensure extra repos are present
+  apt_repository:
+    repo: "{{ item }}"
+    state: present
+  register: apt_repos
+  with_items:
+    -  "deb https://artifacts.elastic.co/packages/{{ elk_ver }}.x/apt stable main"
+
+- name: Ensure APT cache is updated
   apt:
     update_cache: yes
-    cache_valid_time: 120
+  when: apt_repos|changed or apt_keys|changed
 
-- name: "Ensure {{ source_path }} is created"
-  file:
-    path: "{{ source_path }}"
-    state: directory
-    mode: 755
+- name: Ensure needed packages are installed
+  apt:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - elasticsearch
 
-- name: Download install script
-  get_url:
-    url: https://s3.amazonaws.com/aws-cloudwatch/downloads/latest/awslogs-agent-setup.py
-    dest: /tmp/awslogs-agent-setup.py
-    mode: 550
-
-- name: Create awslogs.conf
-  template:
-    src: awslogs.conf.j2
-    dest: "{{ logging_config_file }}"
-  register: awslogs
-
-- name: Install the CloudWatch logs agent
-  shell: "python /tmp/awslogs-agent-setup.py -n -r {{ aws_region }} -c {{ logging_config_file }}"
-  when: awslogs|changed
-  notify: restart awslogs
-
-- name: Ensure awslogs is started and enabled at startup
+- name: Ensure elasticsearch is installed and enabled on startup
   service:
-    name: awslogs
+    name: elasticsearch
     state: started
     enabled: yes
+
+- name: Ensure that elasticsearch.yml is updated
+  template:
+    src: elasticsearch.yml.j2
+    dest: /etc/elasticsearch.yml
+  notify: restart elasticsearch
