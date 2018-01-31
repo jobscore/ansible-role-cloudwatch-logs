@@ -1,41 +1,5 @@
 ---
-- name: Ensure that extra keys are present
-  apt_key:
-    url: "{{ item }}"
-    state: present
-  register: apt_keys
-  with_items:
-    - "https://artifacts.elastic.co/GPG-KEY-elasticsearch"
+- include_tasks: deps.yml
 
-- name: Ensure extra repos are present
-  apt_repository:
-    repo: "{{ item }}"
-    state: present
-  register: apt_repos
-  with_items:
-    -  "deb https://artifacts.elastic.co/packages/{{ es_ver }}/apt stable main"
-
-- name: Ensure APT cache is updated
-  apt:
-    update_cache: yes
-  when: apt_repos|changed or apt_keys|changed
-
-- name: Ensure needed packages are installed
-  apt:
-    name: "{{ item }}"
-    state: present
-  with_items:
-    - apt-transport-https
-    - elasticsearch
-
-- name: Ensure elasticsearch is installed and enabled on startup
-  service:
-    name: elasticsearch
-    state: started
-    enabled: yes
-
-- name: Ensure that elasticsearch.yml is updated
-  template:
-    src: elasticsearch.yml.j2
-    dest: /etc/elasticsearch.yml
-  notify: restart elasticsearch
+- include_tasks: install.yml
+  with_items: elasticsearch

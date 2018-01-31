@@ -1,0 +1,20 @@
+- set_fact:
+    package: "{{ item }}"
+
+- name: "Ensure {{ package }} is installed"
+  apt:
+    name: "{{ package }}"
+    state: present
+
+- name: "Ensure {{ package }} is installed and enabled on startup"
+  service:
+    name: "{{ package }}"
+    state: started
+    enabled: yes
+
+- name: Ensure yml config is updated for ELK
+  template:
+    src: "{{ package }}.yml.j2"
+    dest: "/etc/{{ package }}/{{ package }}.yml"
+  notify: "restart {{ package }}"
+  with_items: "{{ package }}"
