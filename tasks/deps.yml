@@ -1,4 +1,11 @@
 ---
+- name: Ensure needed packages are installed
+  apt:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - apt-transport-https
+
 - name: Ensure that extra keys are present
   apt_key:
     url: "{{ item }}"
@@ -19,10 +26,3 @@
   apt:
     update_cache: yes
   when: apt_repos|changed or apt_keys|changed
-
-- name: Ensure needed packages are installed
-  apt:
-    name: "{{ item }}"
-    state: present
-  with_items:
-    - apt-transport-https
