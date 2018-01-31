@@ -3,6 +3,9 @@
 
 es_ver: 6
 
-es_server_name: es
-es_host: localhost
-es_port: 9200
+es_config:
+  cluster_name: default
+  node.name: master
+  path.data: /var/lib/elasticsearch
+  path.logs: /var/log/elasticsearch
+  http.port: 9200

@@ -13,7 +13,7 @@
     state: present
   register: apt_repos
   with_items:
-    -  "deb https://artifacts.elastic.co/packages/{{ elk_ver }}.x/apt stable main"
+    -  "deb https://artifacts.elastic.co/packages/{{ es_ver }}.x/apt stable main"
 
 - name: Ensure APT cache is updated
   apt:
