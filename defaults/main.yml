@@ -1,7 +1,7 @@
 ---
 # defaults file for elasticsearch
 
-es_ver: 6
+es_ver: 6.x
 
 es_config:
   cluster_name: default

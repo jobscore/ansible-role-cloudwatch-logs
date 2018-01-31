@@ -13,7 +13,19 @@ Ansible > 1.4
 Role Variables
 --------------
 
-TBD
+`es_ver: 6.x`
+It defines the ElasticSearch version to use, default to **'6.x'**.
+
+`es-config: {}`
+It defines the configuration keys to be set in the `elasticsearch.yml` file. The defaults are the following:
+``` yaml
+es_config:
+  cluster_name: default
+  node.name: master
+  path.data: /var/lib/elasticsearch
+  path.logs: /var/log/elasticsearch
+  http.port: 9200
+```
 
 Dependencies
 ------------
