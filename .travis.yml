@@ -1,18 +1,28 @@
+---
 language: python
 services: docker
+
 env:
-- distro: ubuntu1604
-- distro: ubuntu1404
+  - distro: ubuntu1604
+  - distro: ubuntu1404
+
 script:
-- export container_id=$(date +%s)
-- export cleanup=false
-- wget -O ${PWD}/tests/test.sh https://gist.githubusercontent.com/geerlingguy/73ef1e5ee45d8694570f334be385e181/raw/
-- chmod +x ${PWD}/tests/test.sh
-- "${PWD}/tests/test.sh"
-- docker exec --tty ${container_id} env TERM=xterm curl localhost:9200
+  - export container_id=$(date +%s)
+  - export cleanup=false
+  # Download test shim.
+  - wget -O ${PWD}/tests/test.sh https://gist.githubusercontent.com/geerlingguy/73ef1e5ee45d8694570f334be385e181/raw/
+  - chmod +x ${PWD}/tests/test.sh
+
+  # Run tests.
+  - ${PWD}/tests/test.sh
+
+  - 'docker exec --tty ${container_id} env TERM=xterm service awslogs status'
+  - 'docker exec --tty ${container_id} env TERM=xterm cat /var/log/awslogs.log'
+  - 'docker exec --tty ${container_id} env TERM=xterm cat /var/awslogs/awslogs.conf'
+
 notifications:
   email: false
   webhooks: https://galaxy.ansible.com/api/v1/notifications/
   slack:
     rooms:
-      secure: cW3PY8gbO9jSHDGbXullsqTDmJKg+yzS/Ic4yIt+fUgqYNXKtd0Y/r6OQQH7rKlnpCl8NVzCIe0ZMF+nvqD0qhPR/xAuR/FOkyOiz8lU9QLWzUwz5tlqWxzFdlQhVF9ZorBRLW/xKwYKaUzQdxivtOWNtm9oO4B4T/V3s3f7RjGByogeUB95XTJID3IOt8LzcmaghbyxsUw/xp8kjGj2XHZFSAfB7OlwLhdmd/LRy8Q62WvzOd+6s7+9RGBKF0QFqp8qSOUJQR1l1/f4hTdF6VcZ/HHaeHKupkZ7cdQmgvDoSE2qWWE3MkxGcsW0VxCieGFkDKE7+Amw5+jWyhPww8V4QuSiqksclQsHp6+UU1kIQQIAZ9LgtfYkdU7BQS4MIXj1VrleHT0s0gkZNW3sSMdhRLYlpood92dE9BwSMUVBeZfSgXFwInqGL5+uNpQYs94axWDWDTMlJn5Hs2jwOz6xbnjkbLV8tPw4jKo1klRJI6cZ3tN0urAyzp+PKXaw8nfZcu33n8ol9xQHjHV6XwwPvkYKdeEKze9HwdcRyMm7Dum+xpN3e1LI+akz/A6N64LhXhj0r5GFsy5ecgvWbw4lN+Jx5J/N/Hxog40eJkWzWoZRkZPxXylDIEMWoRTjAZNBj1cv/lkqrNydkEyKgcIJ7JqQ2dV+CeE0rzI09y0=
+      - secure:  "FBo51kh6FYQIdfTrx6PZaHCkdLczltP3igNBFbIRdJ5TsyO9uNLWXlIzu69bHmZ2RnraAt5ts8ArvCgrfcVLF/7nfp6m6WUOeukQz1/9VgPuSKt+KyEyL6hLGR9wQnrGfk0jmlP7Zj/PsPxOd+PnK4OZnjpZ1unnL3VpkITUP5pNIyWJFG1bBAgOECXXHaQAjejWack2bvNhfEw6XF55ey9PRPmyx0icRnAaMipMIVKBPZApUPqo0oLVsgdFZcZukAyEhQgmCilSqRaQkiu7x7GY2KAi5VOHPFnnikcMWkt3palN1FNdnyt6Ie4cY6FdjBmrlNLlQgeto7XX6Io1kkLuNLqsnfw49HkXBIKQRZ1me8UYTKV/1A8SXt7ixQWfbr2E0VzN9XR5/c0cDDDyLKubB16BLQKkUOCtdfgCvc/Pkh5rtxe5Tu2m+jsiAzeOiJMS61dA4B4kCpOPACkmzSOpNenbQgpBhe7Frjys+MCmF+LiR6/toRgVZndYK+uuxikvSsW3y4FdaflZUkLGiFGRW6dn+RKbLK1n1tszJprxQHADMUGiaEGV3pTsDfHgYPJoJ/VxBusdZk8ivcx6lHdWxlQ0GDWnLR8yRH/3Hin3mlVQlxLhFrsnHUKbLxLtOeCOrT9HPPdqxRhaZE2sla/8XqQuYArzlCtQtuifzHc="

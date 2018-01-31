@@ -1,11 +1,13 @@
 ---
-# defaults file for elasticsearch
+# defaults file for cloudwatch-logs
 
-es_ver: 6.x
+aws_region: us-east-1
 
-es_config:
-  cluster_name: default
-  node.name: master
-  path.data: /var/lib/elasticsearch
-  path.logs: /var/log/elasticsearch
-  http.port: 9200
+source_path: /var/awslogs
+logging_config_file: "{{ source_path }}/awslogs.conf"
+state_file: "{{ source_path }}/state/agent-state"
+use_gzip_http_content_encoding: true
+
+default_datetime_format: '%b %d %H:%M:%S'
+default_time_zone: UTC
+default_encoding: utf_8

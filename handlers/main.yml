@@ -1,7 +1,7 @@
 ---
-# handlers file for elasticsearch
+# handlers file for cloudwatch-logs
 
-- name: restart elasticsearch
+- name: restart awslogs
   service:
-    name: elasticsearch
+    name: awslogs
     state: restarted

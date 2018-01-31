@@ -1,6 +1,6 @@
 galaxy_info:
   author: ericovis
-  description: Ansible role for isntalling ElasticSearch on Ubuntu
+  description: Ansible role for sending logs to CloudWatch
   company: JobScore
   email: eric@jobscore.com
 
