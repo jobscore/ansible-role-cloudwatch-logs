@@ -7,7 +7,7 @@
         - name: syslog
           args:
             log_group_name: syslog
-            log_stream_name: "{{ anisble_hostname }}"
+            log_stream_name: ubuntu
             datetime_format: '%b %d %H:%M:%S'
             time_zone: UTC
             file: /var/log/syslog
@@ -21,7 +21,7 @@
         - name: auth
           args:
             log_group_name: auth.log
-            log_stream_name: "{{ anisble_hostname }}"
+            log_stream_name: ubuntu
             datetime_format: '%b %d %H:%M:%S'
             time_zone: UTC
             file: /var/log/auth.log

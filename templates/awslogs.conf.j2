@@ -5,7 +5,7 @@ use_gzip_http_content_encoding = {{ cw_logs_use_gzip }}
 
 {% for log in cw_logs_files %}
 [{{ log.name }}]
-{% for key, value in log.args.values() %}
+{% for key, value in log.args.items() %}
 {{ key }} = {{ value }}
 {% endfor %}
 {% endfor %}
