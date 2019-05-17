@@ -4,9 +4,7 @@ logging_config_file = {{ cw_logs_config_file }}
 use_gzip_http_content_encoding = {{ cw_logs_use_gzip }}
 
 {% for log in cw_logs_files %}
-
 [{{ log.name }}]
-file = {{ log.file }}
 {% for key, value in log.args.values() %}
 {{ key }} = {{ value }}
 {% endfor %}
