@@ -1,0 +1,40 @@
+---
+- name: Ensure APT depedencies are present
+  apt:
+    name:
+      - cron
+      - python
+    state: present
+    update_cache: true
+    cache_valid_time: 120
+
+- name: Ensure source path is created
+  file:
+    path: "{{ cw_logs_source_path }}"
+    state: directory
+    mode: 0755
+
+- name: Download install script
+  get_url:
+    url: https://s3.amazonaws.com/aws-cloudwatch/downloads/latest/awslogs-agent-setup.py
+    dest: /tmp/awslogs.py
+    mode: 0755
+
+- name: Ensure awslogs.conf is updated
+  template:
+    src: awslogs.conf.j2
+    dest: "{{ cw_logs_config_file }}"
+  notify: restart awslogs
+
+- name: Ensue the CloudWatch logs agent is installed
+  command: >
+    python /tmp/awslogs.py -n -r {{ aws_region }}
+    -c {{ cw_logs_config_file }}
+  args:
+    creates: /sbin/start-stop-daemon
+
+- name: Ensure awslogs is started and enabled at startup
+  service:
+    name: awslogs
+    state: started
+    enabled: true

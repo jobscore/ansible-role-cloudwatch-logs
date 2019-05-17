@@ -1,9 +1,9 @@
 [general]
-state_file = {{ state_file }}
-logging_config_file = {{ logging_config_file }}
-use_gzip_http_content_encoding = {{ use_gzip_http_content_encoding }}
+state_file = {{ cw_logs_state_file }}
+logging_config_file = {{ cw_logs_config_file }}
+use_gzip_http_content_encoding = {{ cw_logs_use_gzip }}
 
-{% for log in log_files %}
+{% for log in cw_logs_files %}
 
 [{% if log.name is defined %}{{ log.name }}{% else %}{{ log.file }}{% endif %}]
 file = {{ log.file }}
@@ -22,8 +22,8 @@ time_zone = {% if log.time_zone is defined %}{{ log.time_zone }}
 encoding = {% if log.encoding is defined %}{{ log.encoding }}
 {% else %}{{ default_encoding }}
 {% endif %}
-{% if log.kwargs is defined %}
-{% for key, value in log.kwargs.values() %}
+{% if log.extra_args is defined %}
+{% for key, value in log.extra_args.values() %}
 {{ key }} = {{ value }}
 {% endfor %}
 {% endif %}
