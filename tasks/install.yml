@@ -31,7 +31,7 @@
     python /tmp/awslogs.py -n -r {{ aws_region }}
     -c {{ cw_logs_config_file }}
   args:
-    creates: /sbin/start-stop-daemon
+    creates: "{{ cw_logs_source_path }}/bin/awslogs-agent-launcher.sh"
 
 - name: Ensure awslogs is started and enabled at startup
   service:
