@@ -8,8 +8,4 @@ cw_logs_config_file: "{{ cw_logs_source_path }}/awslogs.conf"
 cw_logs_state_file: "{{ cw_logs_source_path }}/state/agent-state"
 cw_logs_use_gzip: 'true'
 
-cw_logs_default_datetime_format: '%b %d %H:%M:%S'
-cw_logs_default_time_zone: UTC
-cw_logs_default_encoding: utf_8
-
 cw_logs_files: []
