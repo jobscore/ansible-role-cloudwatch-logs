@@ -7,7 +7,7 @@ verify_ssl = true
 
 [packages]
 molecule = "*"
-ansible = "*"
+ansible = "<2.8.0"
 docker-py = "*"
 
 [requires]
