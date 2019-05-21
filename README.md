@@ -19,11 +19,6 @@ aws_region: us-east-1
 This one defines the AWS region to use
 
 ``` yaml
-cw_logs_source_path: /var/awslogs
-```
-This one defines where to install the agent
-
-``` yaml
 cw_logs_files: []
 ```
 This is the most important variable, it defines the configuration for logs that you want to manage. It expects a list of logs to for the agent to watch. The list itself follow this format:
