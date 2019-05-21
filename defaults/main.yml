@@ -3,4 +3,6 @@
 
 aws_region: us-east-1
 
+cw_logs_use_gzip: 'true'
+
 cw_logs_files: []
