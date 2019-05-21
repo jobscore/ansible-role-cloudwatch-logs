@@ -10,7 +10,7 @@
 
 - name: Ensure source path is created
   file:
-    path: "{{ cw_logs_source_path }}"
+    path: "/var/awslogs"
     state: directory
     mode: 0755
 
@@ -21,20 +21,51 @@
     mode: 0755
 
 - name: Ensure awslogs.conf is updated
-  template:
-    src: awslogs.conf.j2
-    dest: "{{ cw_logs_config_file }}"
+  copy:
+    dest: "/var/awslogs/awslogs.conf"
+    content: |
+      [general]
+      state_file = /var/awslogs/state/agent-state
+      logging_config_file = /var/awslogs/awslogs.conf
+      use_gzip_http_content_encoding = true
   notify: restart awslogs
 
 - name: Ensue the CloudWatch logs agent is installed
   command: >
     python /tmp/awslogs.py -n -r {{ aws_region }}
-    -c {{ cw_logs_config_file }}
+    -c /var/awslogs/awslogs.conf
   args:
-    creates: "{{ cw_logs_source_path }}/bin/awslogs-agent-launcher.sh"
+    creates: "/var/awslogs/bin/awslogs-agent-launcher.sh"
 
 - name: Ensure awslogs is started and enabled at startup
   service:
     name: awslogs
     state: started
     enabled: true
+
+- name: Get current configuration files
+  command: ls -1 /var/awslogs/etc/config
+  register: conf_files
+  changed_when: false
+
+- name: Ensure that old configuration files are not present
+  file:
+    path: "/var/awslogs/etc/config/{{ item }}"
+    state: absent
+  notify: restart awslogs
+  with_items: "{{ conf_files.stdout_lines }}"
+  when: item not in cw_logs_files
+  changed_when: false
+
+- name: Ensure logs configurations are updated
+  copy:
+    dest: "/var/awslogs/etc/config/{{ item.name }}.conf"
+    content: |
+      [{{ item.name }}]
+      {% for key, value in item.args.items() %}
+      {{ key }} = {{ value }}
+      {% endfor %}
+  changed_when: false
+
+  with_items: "{{ cw_logs_files }}"
+  notify: restart awslogs
