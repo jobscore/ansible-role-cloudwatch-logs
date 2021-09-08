@@ -54,7 +54,7 @@ cw_logs_files:
       batch_count: 10000
       batch_size: 1048576
 ```
-The field `name` defines the name of the log entry, that should be unique and the field `args` should contain the specifics of the log configuration as per AWS docs in here: https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/AgentReference.html
+The field `name` defines the name of the log entry, that should be unique and the field `args` should contain the specifics of the log configuration as per AWS docs in here: https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/Install-CloudWatch-Agent.htmlhtml
 
 
 Dependencies
