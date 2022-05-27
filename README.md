@@ -13,10 +13,15 @@ You should have your AWS credentials already configured in the machine, it works
 Role Variables
 --------------
 
+```yaml
+cw_server_type: <ec2 | onPremise>
+```
+This variable defines if the agent is being installed within a EC2 instance or an on-premise server. Default is `ec2`.
+
 ``` yaml
 aws_region: us-east-1
 ```
-This one defines the AWS region to use
+This one defines the AWS region to use when instance mode is not EC2.
 
 ``` yaml
 cw_logs_files: []
@@ -25,34 +30,16 @@ This is the most important variable, it defines the configuration for logs that 
 
 ``` yaml
 cw_logs_files:
-  - name: syslog
-    args:
-      log_group_name: syslog
-      log_stream_name: ubuntu
-      datetime_format: '%b %d %H:%M:%S'
-      time_zone: UTC
-      file: /var/log/syslog
-      file_fingerprint_lines: 1-5
-      multi_line_start_pattern: '^\s+.*'
-      initial_position: start_of_file
-      encoding: utf_8
-      buffer_duration: 5000
-      batch_count: 10000
-      batch_size: 1048576
-  - name: auth
-    args:
-      log_group_name: auth.log
-      log_stream_name: ubuntu
-      datetime_format: '%b %d %H:%M:%S'
-      time_zone: UTC
-      file: /var/log/auth.log
-      file_fingerprint_lines: 1-5
-      multi_line_start_pattern: '^\s+.*'
-      initial_position: start_of_file
-      encoding: utf_8
-      buffer_duration: 5000
-      batch_count: 10000
-      batch_size: 1048576
+  - log_group_name: /var/log/syslog
+    log_stream_name: '{hostname}-{instance_id}'
+    timestamp_format: '%b %d %H:%M:%S'
+    file_path: /var/log/syslog
+    encoding: utf-8
+  - log_group_name: /var/log/auth.log
+    log_stream_name: '{hostname}-{instance_id}'
+    timestamp_format: '%b %d %H:%M:%S'
+    file_path: /var/log/auth.log
+    encoding: utf-8
 ```
 The field `name` defines the name of the log entry, that should be unique and the field `args` should contain the specifics of the log configuration as per AWS docs in here: https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/AgentReference.html
 
@@ -68,37 +55,20 @@ Example Playbook
 ``` yaml
 - hosts: all
   roles:
-    - role: jobscore.cloudwatch-logs
+    - role: ansible-role-cloudwatch-logs
+      cw_server_type: onPremise
+      aws_region: us-east-1
       cw_logs_files:
-        - name: syslog
-          args:
-            log_group_name: syslog
-            log_stream_name: ubuntu
-            datetime_format: '%b %d %H:%M:%S'
-            time_zone: UTC
-            file: /var/log/syslog
-            file_fingerprint_lines: 1-5
-            multi_line_start_pattern: '^\s+.*'
-            initial_position: start_of_file
-            encoding: utf_8
-            buffer_duration: 5000
-            batch_count: 10000
-            batch_size: 1048576
-        - name: auth
-          args:
-            log_group_name: auth.log
-            log_stream_name: ubuntu
-            datetime_format: '%b %d %H:%M:%S'
-            time_zone: UTC
-            file: /var/log/auth.log
-            file_fingerprint_lines: 1-5
-            multi_line_start_pattern: '^\s+.*'
-            initial_position: start_of_file
-            encoding: utf_8
-            buffer_duration: 5000
-            batch_count: 10000
-            batch_size: 1048576
-
+        - log_group_name: /var/log/syslog
+          log_stream_name: '{hostname}-{instance_id}'
+          timestamp_format: '%b %d %H:%M:%S'
+          file_path: /var/log/syslog
+          encoding: utf-8
+        - log_group_name: /var/log/auth.log
+          log_stream_name: '{hostname}-{instance_id}'
+          timestamp_format: '%b %d %H:%M:%S'
+          file_path: /var/log/auth.log
+          encoding: utf-8
 ```
 License
 -------
@@ -108,4 +78,4 @@ License
 Author Information
 ------------------
 
-This role was created by [Eric Magalhães](https://emagalha.es) while working for [JobScore Inc](https://jobscore.com).
+This role was created by [Eric Magalhães](https://emagalha.es) and [Glauber Batista](https://glauberrbatista.dev) while working for [JobScore Inc](https://jobscore.com).
