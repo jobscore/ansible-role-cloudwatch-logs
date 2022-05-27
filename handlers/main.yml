@@ -1,7 +1,7 @@
 ---
 # handlers file for cloudwatch-logs
 
-- name: restart awslogs
+- name: restart amazon-cloudwatch-agent
   service:
-    name: awslogs
+    name: amazon-cloudwatch-agent
     state: restarted
