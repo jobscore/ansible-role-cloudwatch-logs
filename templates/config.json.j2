@@ -1,0 +1,12 @@
+{
+  "agent": {
+    "run_as_user": "{{ cw_agent_user }}"
+  },
+  "logs": {
+    "logs_collected": {
+      "files": {
+        "collect_list": {{ cw_logs_files | to_json }}
+      }
+    }
+  }
+}
