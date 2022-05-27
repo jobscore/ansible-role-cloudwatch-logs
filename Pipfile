@@ -1,14 +1,16 @@
 [[source]]
-name = "pypi"
 url = "https://pypi.org/simple"
 verify_ssl = true
+name = "pypi"
+
+[packages]
+ansible = "*"
+molecule-docker = "*"
+pytest-testinfra = "*"
+yamllint = "*"
+'molecule[docker]' = "*"
 
 [dev-packages]
 
-[packages]
-molecule = "*"
-ansible = "<2.8.0"
-docker-py = "*"
-
 [requires]
-python_version = "2.7"
+python_version = "3.9"
