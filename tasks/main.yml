@@ -1,2 +1,41 @@
 ---
-- include: install.yml
+- name: Ensure CloudWatch agent installer is downloaded
+  get_url:
+    url: "https://s3.amazonaws.com/amazoncloudwatch-agent/ubuntu/\
+      {{ host_arch }}/latest/amazon-cloudwatch-agent.deb"
+    dest: /tmp/amazon-cloudwatch-agent.deb
+
+- name: Ensure the CloudWatch agent is installed
+  become: true
+  command:
+    cmd: dpkg -i -E /tmp/amazon-cloudwatch-agent.deb
+  changed_when: false
+
+- name: Ensure log configurations are updated
+  become: true
+  template:
+    src: config.json.j2
+    dest: /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent.json
+    mode: 0644
+  notify: restart amazon-cloudwatch-agent
+
+- name: Ensure aws dir exists
+  file:
+    path: /root/.aws
+    state: directory
+  when: cw_server_type == "onPremise"
+
+- name: Ensure aws profile is configured
+  copy:
+    content: |
+      [profile AmazonCloudWatchAgent]
+      region = {{ aws_region }}
+    dest: /root/.aws/credentials
+  when: cw_server_type == "onPremise"
+
+- name: Ensure the CloudWatch agent is enabled
+  become: true
+  command: "/opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl \
+    -a fetch-config -m {{ cw_server_type }} -s \
+    -c file:/opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent.json"
+  changed_when: false

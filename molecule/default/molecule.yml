@@ -3,18 +3,15 @@ dependency:
   name: galaxy
 driver:
   name: docker
-lint:
-  name: yamllint
+lint: |
+  set -e
+  yamllint .
 platforms:
-  - name: xenial
-    image: ubuntu:xenial
   - name: bionic
-    image: ubuntu:bionic
+    image: solita/ubuntu-systemd:18.04
+    privileged: true
+    command: /sbin/init
 provisioner:
   name: ansible
   lint:
     name: ansible-lint
-verifier:
-  name: testinfra
-  lint:
-    name: flake8

@@ -1,16 +1,17 @@
 ---
 galaxy_info:
-  author: ericovis
+  author: Eric Magalhães and Glauber Batista
   description: Ansible role for sending logs to CloudWatch
-  company: JobScore
-  email: eric@jobscore.com
+  company: JobScore Inc
   license: license (GPLv3)
-  min_ansible_version: 2.3
+  min_ansible_version: 2.10
+  namespace: jobscore
+  role_name: cloudwatch_logs
   platforms:
     - name: Ubuntu
       versions:
-        - xenial
         - bionic
+        - focal
   galaxy_tags:
     - aws
     - cloudwatch
