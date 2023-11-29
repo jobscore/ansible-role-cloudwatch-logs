@@ -54,4 +54,4 @@
     -a fetch-config -m {{ cw_server_type }} -s \
     -c file:/opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent.json"
   changed_when: false
-  when: config_file.changed or profile_file.changed
+  when: cw_agent_force_install|bool or config_file.changed or profile_file.changed
