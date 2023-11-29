@@ -1,9 +1,7 @@
-[![Build Status](https://travis-ci.org/jobscore/ansible-role-cloudwatch-logs.svg?branch=master)](https://travis-ci.org/jobscore/ansible-role-cloudwatch-logs)
-
 CloudWatch Log
 =========
 
-This role install the CloudWatch Logs agent on an Ubuntu machine
+This role installs the CloudWatch Logs agent on an Ubuntu machine
 
 Requirements
 ------------
@@ -16,17 +14,17 @@ Role Variables
 ```yaml
 cw_server_type: <ec2 | onPremise>
 ```
-This variable defines if the agent is being installed within a EC2 instance or an on-premise server. Default is `ec2`.
+This variable defines if the agent is being installed within an EC2 instance or an on-premise server. The default is `ec2`.
 
 ``` yaml
 aws_region: us-east-1
 ```
-This one defines the AWS region to use when instance mode is not EC2.
+This one defines the AWS region to use when the instance mode is not EC2.
 
 ``` yaml
 cw_logs_files: []
 ```
-This is the most important variable, it defines the configuration for logs that you want to manage. It expects a list of logs to for the agent to watch. The list itself follow this format:
+This is the most important variable, it defines the configuration for logs that you want to manage. It expects a list of logs for the agent to watch. The list itself follows this format:
 
 ``` yaml
 cw_logs_files:
@@ -41,7 +39,7 @@ cw_logs_files:
     file_path: /var/log/auth.log
     encoding: utf-8
 ```
-The field `name` defines the name of the log entry, that should be unique and the field `args` should contain the specifics of the log configuration as per AWS docs in here: https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/AgentReference.html
+The field `name` defines the name of the log entry, which should be unique and the field `args` should contain the specifics of the log configuration as per AWS docs here: [https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/AgentReference.html](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/Install-CloudWatch-Agent.html)
 
 
 Dependencies
@@ -55,7 +53,7 @@ Example Playbook
 ``` yaml
 - hosts: all
   roles:
-    - role: ansible-role-cloudwatch-logs
+    - role: jobscore.cloudwatch-logs
       cw_server_type: onPremise
       aws_region: us-east-1
       cw_logs_files:
