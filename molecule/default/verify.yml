@@ -1,0 +1,37 @@
+---
+- hosts: all
+  roles:
+    - role: ansible-role-cloudwatch-logs
+      cw_server_type: onPremise
+      aws_region: us-east-1
+      cw_logs_files:
+        - log_group_name: /var/log/syslog
+          log_stream_name: '{hostname}-{instance_id}'
+          timestamp_format: '%b %d %H:%M:%S'
+          file_path: /var/log/syslog
+          encoding: utf-8
+        - log_group_name: /var/log/auth.log
+          log_stream_name: '{hostname}-{instance_id}'
+          timestamp_format: '%b %d %H:%M:%S'
+          file_path: /var/log/auth.log
+          encoding: utf-8
+  post_tasks:
+    - name: Ensure log configurations in place
+      shell: "grep -q {{ item }} /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent.json"
+      changed_when: false
+      with_items: "{{ cw_logs_files|map(attribute='log_group_name')|list }}"
+
+    - name: Check agent status
+      shell: "/opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a status"
+      changed_when: false
+      register: agent_status
+
+    - name: Fail if agent not running
+      fail:
+        msg: "The CloudWatch agent is not running"
+      when: "'running' not in agent_status.stdout"
+
+    - name: Fail if agent not configured
+      fail:
+        msg: "The CloudWatch agent is not running"
+      when: "'\"configured\"' not in agent_status.stdout"
