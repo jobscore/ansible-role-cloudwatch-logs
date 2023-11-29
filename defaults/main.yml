@@ -3,6 +3,7 @@
 
 aws_region: us-east-1
 
+cw_agent_force_install: false
 cw_agent_user: root
 cw_server_type: ec2
 

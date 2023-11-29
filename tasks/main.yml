@@ -1,15 +1,28 @@
 ---
-- name: Ensure CloudWatch agent installer is downloaded
-  get_url:
-    url: "https://s3.amazonaws.com/amazoncloudwatch-agent/ubuntu/\
-      {{ host_arch }}/latest/amazon-cloudwatch-agent.deb"
-    dest: /tmp/amazon-cloudwatch-agent.deb
+- name: Check for existing agent
+  stat:
+    path: /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl
+  register: agent_installed
 
-- name: Ensure the CloudWatch agent is installed
-  become: true
-  command:
-    cmd: dpkg -i -E /tmp/amazon-cloudwatch-agent.deb
-  changed_when: false
+- name: Set fact for agent_installed
+  set_fact:
+    agent_installed: "{{ agent_installed.stat.exists }}"
+  when: agent_installed.stat.exists is defined
+
+- name: Ensure CloudWatch agent is installed
+  block:
+  - name: Ensure CloudWatch agent installer is downloaded
+    get_url:
+      url: "https://s3.amazonaws.com/amazoncloudwatch-agent/ubuntu/\
+        {{ host_arch }}/latest/amazon-cloudwatch-agent.deb"
+      dest: /tmp/amazon-cloudwatch-agent.deb
+
+  - name: Ensure agent is installed
+    become: true
+    command:
+      cmd: dpkg -i -E /tmp/amazon-cloudwatch-agent.deb
+    changed_when: false
+  when: cw_agent_force_install|bool or not agent_installed|bool
 
 - name: Ensure log configurations are updated
   become: true
@@ -17,6 +30,7 @@
     src: config.json.j2
     dest: /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent.json
     mode: 0644
+  register: config_file
   notify: restart amazon-cloudwatch-agent
 
 - name: Ensure aws dir exists
@@ -32,6 +46,7 @@
       region = {{ aws_region }}
     dest: /root/.aws/credentials
   when: cw_server_type == "onPremise"
+  register: profile_file
 
 - name: Ensure the CloudWatch agent is enabled
   become: true
@@ -39,3 +54,4 @@
     -a fetch-config -m {{ cw_server_type }} -s \
     -c file:/opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent.json"
   changed_when: false
+  when: config_file.changed or profile_file.changed
