@@ -6,11 +6,10 @@ name = "pypi"
 [packages]
 ansible = "*"
 molecule-docker = "*"
-pytest-testinfra = "*"
 yamllint = "*"
 'molecule[docker]' = "*"
 
 [dev-packages]
 
 [requires]
-python_version = "3.9"
+python_version = "3.12"
