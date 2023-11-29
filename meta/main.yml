@@ -6,7 +6,7 @@ galaxy_info:
   license: license (GPLv3)
   min_ansible_version: 2.10
   namespace: jobscore
-  role_name: cloudwatch_logs
+  role_name: cloudwatch-logs
   platforms:
     - name: Ubuntu
       versions:
