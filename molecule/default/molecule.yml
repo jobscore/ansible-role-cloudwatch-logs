@@ -9,6 +9,7 @@ lint: |
 platforms:
   - name: bionic
     image: geerlingguy/docker-ubuntu1804-ansible:latest
+    command: ${MOLECULE_DOCKER_COMMAND:-""}
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:rw
     cgroupns_mode: host
@@ -16,6 +17,7 @@ platforms:
     pre_build_image: true
   - name: focal
     image: geerlingguy/docker-ubuntu2004-ansible:latest
+    command: ${MOLECULE_DOCKER_COMMAND:-""}
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:rw
     cgroupns_mode: host
@@ -23,6 +25,7 @@ platforms:
     pre_build_image: true
   - name: jammy
     image: geerlingguy/docker-ubuntu2204-ansible:latest
+    command: ${MOLECULE_DOCKER_COMMAND:-""}
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:rw
     cgroupns_mode: host
