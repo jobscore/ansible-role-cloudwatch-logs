@@ -1,5 +1,6 @@
 CloudWatch Log
 =========
+[![CI](https://github.com/jobscore/ansible-role-cloudwatch-logs/actions/workflows/ci.yml/badge.svg)](https://github.com/jobscore/ansible-role-cloudwatch-logs/actions/workflows/ci.yml)
 
 This role installs the CloudWatch Logs agent on an Ubuntu machine
 
