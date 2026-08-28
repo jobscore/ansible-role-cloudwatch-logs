@@ -1,3 +1,4 @@
+---
 extends: default
 
 rules:
@@ -8,4 +9,8 @@ rules:
     max-spaces-inside: 1
     level: error
   line-length: disable
-  truthy: disable
+  comments:
+    min-spaces-from-content: 1
+  comments-indentation: false
+  octal-values:
+    forbid-implicit-octal: true

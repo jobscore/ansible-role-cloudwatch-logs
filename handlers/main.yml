@@ -1,7 +1,7 @@
 ---
 # handlers file for cloudwatch-logs
 
-- name: restart amazon-cloudwatch-agent
-  service:
+- name: Restart amazon-cloudwatch-agent
+  ansible.builtin.service:
     name: amazon-cloudwatch-agent
     state: restarted
